@@ -1,35 +1,29 @@
 import Box from '@mui/material/Box';
 import { getPosts } from '@/lib/fs';
+import Post from '@/app/posts/[[...slug]]/post';
 
-export default async function Post({ params }) {
-  const post = getPostBySlugs(params.slug);
+const borderSize = 0;
+export default async function Home({ params }) {
+  const post = (await getPosts())[(params.slug || []).join('/')];
+  console.log(post);
   return (
-    <main>
-      <Box>Preview: [{post.preview}]</Box>
-      <Box>Title: [{post.title}]</Box>
-      <Box>
-        Tags: [{post.tags.reduce((acc, current) => acc + ', ' + current, '')}]
-      </Box>
-      <Box>Content: [{post.post}]</Box>
-      <Box>Created At: [{post.createdAt}]</Box>
-      <Box>Modified At: [{post.modifiedAt}]</Box>
-    </main>
+    <Box
+      sx={{
+        border: borderSize,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      <Post post={post} />
+    </Box>
   );
 }
 
-function getPostBySlugs(slugs) {
-  const posts = getAllPosts();
-  return posts[slugs.join('/')];
-}
-
 export async function generateStaticParams() {
-  const posts = getPosts();
+  const posts = await getPosts();
   return Object.keys(posts)
     .sort((a, b) => a.localeCompare(b))
     .map((value) => value.split('/').filter(Boolean))
     .map((value) => ({ slug: value }));
-}
-
-export function getAllPosts() {
-  return getPosts();
 }

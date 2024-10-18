@@ -1,29 +1,41 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import Yaml from 'yaml';
+import renderAsHtml from '@/lib/md';
 
 function slashLStripper(data) {
   return data.replace(/^\/+/g, '');
 }
 
-export function getPosts(directory) {
+export async function getPosts(directory) {
   const dir = directory || '/Users/divi/git/blog-content/posts';
-  return readdirSync(dir, {
+  const allPostsAsPromises = readdirSync(dir, {
     recursive: true,
     withFileTypes: true
   })
     .map((file) => {
-      const post = readFileAsPost(file);
+      return {
+        post: readFileAsPost(file),
+        file
+      };
+    })
+    .filter(({ post, file }) => Boolean(post))
+    .map(async ({ post, file }) => {
       return {
         path: slashLStripper(file.path.replace(dir, '') + '/') + file.name,
         name: file.name,
-        post
+        post: {
+          ...post,
+          post: (await renderAsHtml(post.post)).value
+        }
       };
-    })
-    .filter((post) => post.post)
-    .reduce((posts, { path, post } = post) => {
+    });
+  return (await Promise.all(allPostsAsPromises)).reduce(
+    (posts, { path, post } = post) => {
       posts[path] = post;
       return posts;
-    }, {});
+    },
+    {}
+  );
 }
 
 function readFileAsPost(file) {
