@@ -12,11 +12,11 @@ fs.readdirSync(dir).forEach((file) => {
     (postDate.getMonth() + 1).toString().padStart(2, '0'),
     postDate.getDate().toString().padStart(2, '0')
   ].join('/');
-  console.log(postDate, postDate.getTime());
   fs.mkdirSync(targetDir + '/' + datePath, { recursive: true });
   const tags = Array.isArray(post.data.categories)
     ? post.data.categories
     : post.data.categories.split();
+  console.log(`${post.data.title}\n${_slugify(post.data.title)}\n${file}\n`);
   const migratedData = {
     data: {
       title: post.data.title,
@@ -27,8 +27,16 @@ fs.readdirSync(dir).forEach((file) => {
     content: post.content
   };
   fs.writeFileSync(
-    targetDir + '/' + datePath + '/' + slugify(post.data.title) + '.post',
+    targetDir + '/' + datePath + '/' + _slugify(post.data.title) + '.post',
     matter.stringify(migratedData.content, migratedData.data)
   );
   // console.log(migratedData);
 });
+
+function _slugify(title) {
+  const trimmedTitle = title
+    .split('')
+    .filter((value) => /[\w -]/.test(value))
+    .join('');
+  return slugify(trimmedTitle).toLocaleLowerCase();
+}
