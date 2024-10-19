@@ -1,12 +1,12 @@
 import { readdirSync, readFileSync } from 'node:fs';
-import Yaml from 'yaml';
 import renderAsHtml from '@/lib/md';
+import matter from 'gray-matter';
 
 function slashLStripper(data) {
   return data.replace(/^\/+/g, '');
 }
 
-export async function getPosts(directory) {
+export async function getPosts({ directory, path }) {
   const dir = directory || '/Users/divi/git/blog-content/posts';
   const allPostsAsPromises = readdirSync(dir, {
     recursive: true,
@@ -29,13 +29,19 @@ export async function getPosts(directory) {
         }
       };
     });
-  return (await Promise.all(allPostsAsPromises)).reduce(
-    (posts, { path, post } = post) => {
+  const posts = await Promise.all(allPostsAsPromises);
+  const pathToBeMatched = (path || []).join('/');
+  return posts
+    .filter((post) => {
+      if (pathToBeMatched.length <= 0) {
+        return true;
+      }
+      return post.path.startsWith(pathToBeMatched);
+    })
+    .reduce((posts, { path, post } = post) => {
       posts[path] = post;
       return posts;
-    },
-    {}
-  );
+    }, {});
 }
 
 function readFileAsPost(file) {
@@ -46,7 +52,7 @@ function readFileAsPost(file) {
     const data = readFileSync(file.path + '/' + file.name, {
       encoding: 'utf8'
     });
-    return Yaml.parse(data);
+    return matter(data);
   } catch (error) {
     console.error(`Reading [${file.path + '/' + file.name}] Failed`, {
       cause: error

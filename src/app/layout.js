@@ -21,14 +21,13 @@ export default function RootLayout({ children }) {
       <body className={font.className}>
         <Box
           sx={{
-            margin: 0,
+            margin: 1,
             display: 'flex',
             flex: 1,
             justifyContent: 'center',
             justifyItems: 'center',
             alignItems: 'center',
-            alignContent: 'center',
-            backgroundColor: '#3F3F3F'
+            alignContent: 'center'
           }}
         >
           <Box
