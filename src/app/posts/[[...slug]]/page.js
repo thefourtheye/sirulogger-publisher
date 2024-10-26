@@ -6,7 +6,6 @@ import DirListing from '@/app/posts/[[...slug]]/dirListing';
 
 const borderSize = 0;
 export default async function Home({ params }) {
-  console.log(`Slug is ${JSON.stringify(params.slug)}`);
   const post = (await getPosts({}))[(params.slug || []).join('/')];
   if (!post) {
     const posts = await getPosts({ path: params.slug || [] });
@@ -15,7 +14,7 @@ export default async function Home({ params }) {
     }
     return (
       <DirListing
-        path={params.slug}
+        path={params.slug || []}
         posts={posts}
       ></DirListing>
     );
@@ -41,8 +40,7 @@ export async function generateStaticParams() {
     .map((value) => value.split('/').filter(Boolean))
     .flatMap((value) => getAllPaths(value))
     .map((value) => ({ slug: value }));
-  console.log(allPostPaths);
-  return allPostPaths;
+  return [...allPostPaths, { slug: [] }];
 }
 
 function getAllPaths(paths) {

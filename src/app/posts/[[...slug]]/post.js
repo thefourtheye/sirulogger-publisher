@@ -12,17 +12,17 @@ function getDivider(post) {
   return (
     <Box
       sx={{
+        borderRadius: 3,
         border: borderSize,
         display: 'flex',
         flexDirection: 'row',
         justifyItems: 'space-between',
         alignItems: 'center',
-        margin: 0,
-        backgroundColor: '#9a9a9a'
+        margin: 0
       }}
     >
       <Box sx={{ flex: '0 0 auto', margin: 1, fontSize: 'small' }}>
-        {formatEpochAsDate(post.createdAt)}
+        {formatEpochAsDate(post.data.createdAt)}
       </Box>
       <Box sx={{ flex: 1 }}>
         <Divider
@@ -43,11 +43,15 @@ function getDivider(post) {
           columnGap: 1
         }}
       >
-        {post.tags.map((tag) => {
+        {post.data.tags.map((tag) => {
           return (
             <Chip
               key={tag}
-              variant="outlined"
+              sx={{
+                backgroundColor: 'black',
+                color: 'white'
+              }}
+              variant="filled"
               label={
                 <Box
                   sx={{
@@ -73,7 +77,7 @@ function getDivider(post) {
         />
       </Box>
       <Box sx={{ flex: '0 0 auto', margin: 1, fontSize: 'small' }}>
-        {formatEpochAsDate(post.modifiedAt)}
+        {formatEpochAsDate(post.data.modifiedAt)}
       </Box>
     </Box>
   );
@@ -96,11 +100,11 @@ export default function Post({ post }) {
           margin: 0,
           padding: 1,
           border: borderSize,
-          minWidth: '50vw'
+          minWidth: '100%'
         }}
       >
         {getDivider(post)}
-        <Box sx={{ backgroundColor: '#e9e9e9' }}>
+        <Box sx={{ backgroundColor: '#c9c9c9' }}>
           <Box
             sx={{
               fontWeight: 'bold',
@@ -109,12 +113,14 @@ export default function Post({ post }) {
               border: borderSize,
               margin: 1,
               padding: 0,
-              paddingTop: 3
+              paddingTop: 1
             }}
           >
-            {post.title}
+            {post.data.title}
             <Divider
               sx={{
+                margin: 3,
+                padding: 0,
                 border: '1',
                 borderStyle: 'dashed'
               }}
@@ -130,7 +136,7 @@ export default function Post({ post }) {
               border: borderSize
             }}
           >
-            <div dangerouslySetInnerHTML={{ __html: post.post }} />
+            <div dangerouslySetInnerHTML={{ __html: post.content }} />
           </Box>
         </Box>
       </Box>
