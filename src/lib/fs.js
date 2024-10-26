@@ -6,8 +6,30 @@ function slashLStripper(data) {
   return data.replace(/^\/+/g, '');
 }
 
+const lookup = {};
+
 export async function getPosts({ directory, path }) {
   const dir = directory || '/Users/divi/git/blog-content/posts';
+  if (!lookup[dir]) {
+    lookup[dir] = getAllPostsAsPromises(dir);
+  }
+  const posts = await lookup[dir];
+  const pathToBeMatched = (path || []).join('/');
+  return posts
+    .filter((post) => {
+      if (pathToBeMatched.length <= 0) {
+        return true;
+      }
+      return post.path.startsWith(pathToBeMatched);
+    })
+    .reduce((posts, { path, post } = post) => {
+      posts[path] = post;
+      return posts;
+    }, {});
+}
+
+function getAllPostsAsPromises(dir) {
+  console.log(`Getting Posts from Dir [${dir}]`);
   const allPostsAsPromises = readdirSync(dir, {
     recursive: true,
     withFileTypes: true
@@ -29,19 +51,7 @@ export async function getPosts({ directory, path }) {
         }
       };
     });
-  const posts = await Promise.all(allPostsAsPromises);
-  const pathToBeMatched = (path || []).join('/');
-  return posts
-    .filter((post) => {
-      if (pathToBeMatched.length <= 0) {
-        return true;
-      }
-      return post.path.startsWith(pathToBeMatched);
-    })
-    .reduce((posts, { path, post } = post) => {
-      posts[path] = post;
-      return posts;
-    }, {});
+  return Promise.all(allPostsAsPromises);
 }
 
 function readFileAsPost(file) {
