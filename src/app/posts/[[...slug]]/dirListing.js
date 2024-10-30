@@ -77,8 +77,8 @@ function recursiveLink(posts, currentPath, level) {
 export default function DirListing({ posts, path }) {
   const groupedPosts = groupPosts(path, posts);
   return (
-    <Box sx={{ margin: 3, height: '100%', border: borderSize }}>
-      <Box sx={{ margin: 0, padding: 1 }}>
+    <Box sx={{ margin: 1, height: '100%', border: borderSize }}>
+      <Box sx={{ margin: 0, padding: 0 }}>
         <h1>Listing of Path: {path.join('/')}</h1>
       </Box>
       {recursiveLink(groupedPosts, path.join('/'), 1)}
