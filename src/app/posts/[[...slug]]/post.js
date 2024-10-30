@@ -1,5 +1,5 @@
 'use client';
-import { Chip, Divider, Box } from '@mui/material';
+import { Chip, Divider, Box, Typography } from '@mui/material';
 import { useState } from 'react';
 
 const borderSize = 0;
@@ -22,7 +22,7 @@ function getDivider(post) {
       }}
     >
       <Box sx={{ flex: '0 0 auto', margin: 1, fontSize: 'small' }}>
-        {formatEpochAsDate(post.data.createdAt)}
+        {formatEpochAsDate(post.metadata.createdAt)}
       </Box>
       <Box sx={{ flex: 1 }}>
         <Divider
@@ -43,7 +43,7 @@ function getDivider(post) {
           columnGap: 1
         }}
       >
-        {post.data.tags.map((tag) => {
+        {post.metadata.tags.map((tag) => {
           return (
             <Chip
               key={tag}
@@ -55,15 +55,14 @@ function getDivider(post) {
               label={
                 <Box
                   sx={{
-                    fontFamily: 'monospace'
+                    fontFamily: 'monospace',
+                    fontWeight: 'bold'
                   }}
                 >
                   {tag}
                 </Box>
               }
-            >
-              {tag}
-            </Chip>
+            />
           );
         })}
       </Box>
@@ -77,68 +76,62 @@ function getDivider(post) {
         />
       </Box>
       <Box sx={{ flex: '0 0 auto', margin: 1, fontSize: 'small' }}>
-        {formatEpochAsDate(post.data.modifiedAt)}
+        {formatEpochAsDate(post.metadata.modifiedAt)}
       </Box>
     </Box>
   );
 }
 
 export default function Post({ post }) {
-  const [showSideBar, setShowSideBar] = useState(false);
   return (
     <Box
       sx={{
         border: borderSize,
         display: 'flex',
+        flexDirection: 'column',
+        alignContent: 'center',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        justifyItems: 'center',
+        minWidth: '99%',
+        maxWidth: '99%'
       }}
     >
       <Box
         sx={{
-          flex: 0,
+          fontWeight: 'bold',
+          fontSize: '3em',
+          lineHeight: '1.5em',
+          border: borderSize,
+          minWidth: '100%',
+          letterSpacing: '0.02em'
+        }}
+      >
+        <center>
+          <b>{post.metadata.title}</b>
+        </center>
+      </Box>
+      <Box
+        sx={{
+          height: '100%',
+          flex: '1 1 auto',
           margin: 0,
           padding: 1,
+          boxShadow: 0,
           border: borderSize,
-          minWidth: '100%'
+          overflow: 'auto'
+        }}
+      >
+        <div dangerouslySetInnerHTML={{ __html: post.post }} />
+      </Box>
+      <Box
+        sx={{
+          border: borderSize,
+          minWidth: '100%',
+          marginTop: 'auto'
         }}
       >
         {getDivider(post)}
-        <Box sx={{ backgroundColor: '#c9c9c9' }}>
-          <Box
-            sx={{
-              fontWeight: 'bold',
-              fontSize: '3em',
-              lineHeight: '1em',
-              border: borderSize,
-              margin: 1,
-              padding: 0,
-              paddingTop: 1
-            }}
-          >
-            {post.data.title}
-            <Divider
-              sx={{
-                margin: 3,
-                padding: 0,
-                border: '1',
-                borderStyle: 'dashed'
-              }}
-              orientation="horizontal"
-            />
-          </Box>
-          <Box
-            sx={{
-              marginTop: 3,
-              marginLeft: 3,
-              padding: 0,
-              boxShadow: 0,
-              border: borderSize
-            }}
-          >
-            <div dangerouslySetInnerHTML={{ __html: post.content }} />
-          </Box>
-        </Box>
       </Box>
     </Box>
   );

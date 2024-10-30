@@ -19,22 +19,11 @@ export default async function Home({ params }) {
       ></DirListing>
     );
   }
-  return (
-    <Box
-      sx={{
-        border: borderSize,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}
-    >
-      <Post post={post} />
-    </Box>
-  );
+  return <Post post={post} />;
 }
 
 export async function generateStaticParams() {
-  const posts = await getPosts({});
+  const posts = await getPosts({ forceRefresh: true });
   const allPostPaths = Object.keys(posts)
     .sort((a, b) => a.localeCompare(b))
     .map((value) => value.split('/').filter(Boolean))

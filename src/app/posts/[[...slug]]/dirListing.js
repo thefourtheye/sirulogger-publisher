@@ -1,6 +1,8 @@
 import Box from '@mui/material/Box';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 
+const borderSize = 0;
+
 function groupPosts(path, posts) {
   const root = {};
   Object.entries(posts).forEach(([key, post]) => {
@@ -37,7 +39,7 @@ function getHeading(children, level) {
 
 function recursiveLink(posts, currentPath, level) {
   return Object.entries(posts).map(([key, post]) => {
-    if (post.content) {
+    if (post.post) {
       return (
         <Box>
           <a
@@ -45,7 +47,7 @@ function recursiveLink(posts, currentPath, level) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            {getHeading(post.data.title, level)}
+            {getHeading(post.metadata.title, level)}
           </a>
         </Box>
       );
@@ -75,7 +77,7 @@ function recursiveLink(posts, currentPath, level) {
 export default function DirListing({ posts, path }) {
   const groupedPosts = groupPosts(path, posts);
   return (
-    <Box sx={{ margin: 3, height: '100%', border: 0 }}>
+    <Box sx={{ margin: 3, height: '100%', border: borderSize }}>
       <Box sx={{ margin: 0, padding: 1 }}>
         <h1>Listing of Path: {path.join('/')}</h1>
       </Box>

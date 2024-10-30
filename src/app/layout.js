@@ -3,6 +3,7 @@ import { PT_Serif } from 'next/font/google';
 const font = PT_Serif({ weight: '400', subsets: ['latin'], display: 'swap' });
 import './globals.css';
 import Box from '@mui/material/Box';
+import { Divider } from '@mui/material';
 
 export const metadata = {
   title: 'Create Next App',
@@ -12,6 +13,78 @@ export const metadata = {
 const borderSize = 0;
 
 export default function RootLayout({ children }) {
+  function getHeader() {
+    return (
+      <Box
+        sx={{
+          flex: 0,
+          borderRadius: 1,
+          border: borderSize,
+          padding: 3,
+          rowGap: 3,
+          backgroundColor: 'black',
+          color: '#9A9A9A',
+          display: 'flex',
+          flexDirection: 'row'
+        }}
+      >
+        <Box
+          sx={{
+            flex: 1,
+            border: borderSize,
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
+          <Box
+            sx={{
+              border: borderSize,
+              fontSize: '4rem',
+              color: 'white',
+              letterSpacing: '0.04em'
+            }}
+          >
+            <b>thefourtheye's weblog</b>
+          </Box>
+          <Box
+            sx={{
+              border: borderSize,
+              fontSize: '1.25rem',
+              color: '#9A9A9A',
+              lineHeight: '2rem'
+            }}
+          >
+            Opinions are my own; Try code/suggestions at your own risk
+          </Box>
+        </Box>
+        <hr />
+        <Box
+          sx={{
+            flex: 0,
+            border: borderSize,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            columnGap: 3
+          }}
+        >
+          <Box
+            sx={{
+              padding: 3,
+              margin: 3,
+              display: 'flex',
+              columnGap: 3
+            }}
+          >
+            <a href={'/'}>Home</a>
+            <a href={'/posts'}>Posts</a>
+          </Box>
+        </Box>
+      </Box>
+    );
+  }
+
   return (
     <html lang="en">
       <head>
@@ -23,13 +96,17 @@ export default function RootLayout({ children }) {
       <body className={font.className}>
         <Box
           sx={{
-            margin: 0,
+            border: borderSize,
             display: 'flex',
-            flex: 1,
-            justifyContent: 'center',
+            minWidth: '1024px',
+            maxWidth: '1024px',
+            alignItems: 'stretch',
+            alignContents: 'center',
+            justifyContents: 'center',
             justifyItems: 'center',
-            alignItems: 'center',
-            alignContent: 'center'
+            flexDirection: 'column',
+            marginTop: 0.5,
+            marginBottom: 9
           }}
         >
           <Box
@@ -37,65 +114,20 @@ export default function RootLayout({ children }) {
               display: 'flex',
               flexDirection: 'column',
               border: borderSize,
-              margin: 0,
               padding: 0,
-              minHeight: '100vh',
-              minWidth: '1024px',
-              maxWidth: '1024px'
+              rowGap: 1
             }}
           >
+            {getHeader()}
             <Box
               sx={{
-                flex: 'initial',
-                border: borderSize,
-                padding: 3,
-                margin: 0,
-                backgroundColor: '#303030',
-                borderRadius: 3
-              }}
-            >
-              <Box
-                sx={{
-                  fontWeight: 'bold',
-                  fontSize: '2rem',
-                  color: 'white'
-                }}
-              >
-                thefourtheye's weblog
-              </Box>
-              <Box
-                sx={{
-                  fontWeight: 'normal',
-                  fontSize: '1rem',
-                  color: '#9A9A9A'
-                }}
-              >
-                opinions are my own; try code/suggestions at your own risk
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                flex: 1,
-                border: borderSize,
-                padding: 0,
-                margin: 0,
-                overflow: 'auto'
+                marginLeft: 3,
+                marginTop: 0,
+                marginRight: 3,
+                marginBottom: 3
               }}
             >
               {children}
-            </Box>
-            <Box
-              sx={{
-                flex: 'initial',
-                borderRadius: 3,
-                border: borderSize,
-                padding: 3,
-                margin: 0,
-                backgroundColor: '#303030',
-                color: '#9A9A9A'
-              }}
-            >
-              Copyright © 2024 - Sakthipriyan Vairamani (thefourtheye)
             </Box>
           </Box>
         </Box>

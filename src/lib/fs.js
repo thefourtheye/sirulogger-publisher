@@ -8,9 +8,9 @@ function slashLStripper(data) {
 
 const lookup = {};
 
-export async function getPosts({ directory, path }) {
+export async function getPosts({ directory, path, forceRefresh }) {
   const dir = directory || '/Users/divi/git/blog-content/posts';
-  if (!lookup[dir]) {
+  if (forceRefresh || !lookup[dir]) {
     lookup[dir] = getAllPostsAsPromises(dir);
   }
   const posts = await lookup[dir];
@@ -22,8 +22,8 @@ export async function getPosts({ directory, path }) {
       }
       return post.path.startsWith(pathToBeMatched);
     })
-    .reduce((posts, { path, post } = post) => {
-      posts[path] = post;
+    .reduce((posts, post) => {
+      posts[post.path] = post;
       return posts;
     }, {});
 }
@@ -36,19 +36,17 @@ function getAllPostsAsPromises(dir) {
   })
     .map((file) => {
       return {
-        post: readFileAsPost(file),
+        matter: readFileAsPost(file),
         file
       };
     })
-    .filter(({ post, file }) => Boolean(post))
-    .map(async ({ post, file }) => {
+    .filter(({ matter, file }) => Boolean(matter))
+    .map(async ({ matter, file }) => {
       return {
         path: slashLStripper(file.path.replace(dir, '') + '/') + file.name,
         name: file.name,
-        post: {
-          ...post,
-          post: (await renderAsHtml(post.post)).value
-        }
+        metadata: matter.metadata,
+        post: (await renderAsHtml(matter.content)).value
       };
     });
   return Promise.all(allPostsAsPromises);
@@ -62,7 +60,11 @@ function readFileAsPost(file) {
     const data = readFileSync(file.path + '/' + file.name, {
       encoding: 'utf8'
     });
-    return matter(data);
+    const result = matter(data);
+    return {
+      metadata: result.data,
+      content: result.content
+    };
   } catch (error) {
     console.error(`Reading [${file.path + '/' + file.name}] Failed`, {
       cause: error
