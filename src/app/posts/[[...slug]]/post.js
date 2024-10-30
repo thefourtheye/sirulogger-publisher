@@ -119,7 +119,11 @@ export default function Post({ post }) {
           padding: 1,
           boxShadow: 0,
           border: borderSize,
-          overflow: 'auto'
+          overflow: 'auto',
+          letterSpacing: '.03em',
+          fontSize: 'large',
+          textAlign: 'justify',
+          lineHeight: '2rem'
         }}
       >
         <div dangerouslySetInnerHTML={{ __html: post.post }} />
