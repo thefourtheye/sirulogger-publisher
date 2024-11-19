@@ -59,7 +59,7 @@ function getDivider(post) {
                     fontWeight: 'bold'
                   }}
                 >
-                  {tag}
+                  <a href={`/tags/${tag}`}>{tag}</a>
                 </Box>
               }
             />
