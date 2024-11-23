@@ -3,7 +3,6 @@ import { PT_Serif } from 'next/font/google';
 const font = PT_Serif({ weight: '400', subsets: ['latin'], display: 'swap' });
 import './globals.css';
 import Box from '@mui/material/Box';
-import { Divider } from '@mui/material';
 
 export const metadata = {
   title: 'Create Next App',
@@ -12,79 +11,79 @@ export const metadata = {
 
 const borderSize = 0;
 
-export default function RootLayout({ children }) {
-  function getHeader() {
-    return (
+function getHeader() {
+  return (
+    <Box
+      sx={{
+        flex: 0,
+        borderRadius: 1,
+        border: borderSize,
+        padding: 3,
+        rowGap: 3,
+        backgroundColor: 'black',
+        color: '#9A9A9A',
+        display: 'flex',
+        flexDirection: 'row'
+      }}
+    >
       <Box
         sx={{
-          flex: 0,
-          borderRadius: 1,
+          flex: 1,
           border: borderSize,
-          padding: 3,
-          rowGap: 3,
-          backgroundColor: 'black',
-          color: '#9A9A9A',
           display: 'flex',
-          flexDirection: 'row'
+          flexDirection: 'column'
         }}
       >
         <Box
           sx={{
-            flex: 1,
             border: borderSize,
-            display: 'flex',
-            flexDirection: 'column'
+            fontSize: '4rem',
+            color: 'white',
+            letterSpacing: '0.04em'
           }}
         >
-          <Box
-            sx={{
-              border: borderSize,
-              fontSize: '4rem',
-              color: 'white',
-              letterSpacing: '0.04em'
-            }}
-          >
-            <b>thefourtheye's weblog</b>
-          </Box>
-          <Box
-            sx={{
-              border: borderSize,
-              fontSize: '1.25rem',
-              color: '#9A9A9A',
-              lineHeight: '2rem'
-            }}
-          >
-            Opinions are my own; Try code/suggestions at your own risk
-          </Box>
+          <b>thefourtheye's weblog</b>
         </Box>
-        <hr />
         <Box
           sx={{
-            flex: 0,
             border: borderSize,
+            fontSize: '1.25rem',
+            color: '#9A9A9A',
+            lineHeight: '2rem'
+          }}
+        >
+          Opinions are my own; Try code/suggestions at your own risk
+        </Box>
+      </Box>
+      <hr />
+      <Box
+        sx={{
+          flex: 0,
+          border: borderSize,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          columnGap: 3
+        }}
+      >
+        <Box
+          sx={{
+            padding: 3,
+            margin: 3,
             display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
             columnGap: 3
           }}
         >
-          <Box
-            sx={{
-              padding: 3,
-              margin: 3,
-              display: 'flex',
-              columnGap: 3
-            }}
-          >
-            <a href={'/'}>Home</a>
-            <a href={'/posts'}>Posts</a>
-          </Box>
+          <a href={'/'}>Home</a>
+          <a href={'/posts'}>Posts</a>
         </Box>
       </Box>
-    );
-  }
+    </Box>
+  );
+}
 
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
@@ -97,37 +96,46 @@ export default function RootLayout({ children }) {
         <Box
           sx={{
             border: borderSize,
+            margin: 0,
             display: 'flex',
-            minWidth: '1024px',
-            maxWidth: '1024px',
             alignItems: 'stretch',
             alignContents: 'center',
-            justifyContents: 'center',
-            justifyItems: 'center',
-            flexDirection: 'column',
-            marginTop: 0.5,
-            marginBottom: 9
+            justifyContent: 'center',
+            justifyItems: 'center'
           }}
         >
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
+              flex: 1,
               border: borderSize,
-              padding: 0,
-              rowGap: 1
+              display: 'flex',
+              minWidth: '1024px',
+              maxWidth: '1024px',
+              flexDirection: 'column',
+              marginTop: 0.5,
+              marginBottom: 9
             }}
           >
-            {getHeader()}
             <Box
               sx={{
-                marginLeft: 3,
-                marginTop: 0,
-                marginRight: 3,
-                marginBottom: 3
+                display: 'flex',
+                flexDirection: 'column',
+                border: borderSize,
+                padding: 0,
+                rowGap: 1
               }}
             >
-              {children}
+              {getHeader()}
+              <Box
+                sx={{
+                  marginLeft: 3,
+                  marginTop: 0,
+                  marginRight: 3,
+                  marginBottom: 3
+                }}
+              >
+                {children}
+              </Box>
             </Box>
           </Box>
         </Box>
